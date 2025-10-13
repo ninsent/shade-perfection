@@ -1,0 +1,81 @@
+# Contributing to Shade Perfection
+
+Thank you for your interest in contributing to Shade Perfection! We aim to make the contribution process simple and straightforward.
+
+## Quick Start
+
+1. Fork and Clone the project:
+```bash
+git clone https://github.com/yourusername/shade-perfection.git
+```
+
+2. Go to the project directory
+
+```bash
+  cd shade-perfection
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Build the plugin:
+```bash
+npm run build
+```
+
+4. Test in Figma:
+   - Open Figma Desktop
+   - Go to Plugins → Development → Import plugin from manifest
+   - Select `manifest.json` from the project directory
+
+5. Create a feature branch:
+```bash
+git checkout -b feature/your-feature-name
+```
+
+---
+
+## Guidelines
+
+### Code Style
+- Follow existing code structure
+- Use meaningful variable names
+- Add JSDoc comments for functions
+- Keep code simple and readable
+
+### Pull Requests
+1. Update documentation if needed
+2. Submit PR with clear description:
+   - What changed
+   - Why it was changed
+   - How to test the changes
+
+### Project Structure
+```
+shade-perfection/
+├── code.ts           # Backend (TypeScript)
+├── ui.html           # Frontend (HTML/CSS/JS)
+├── manifest.json     # Figma plugin manifest
+└── tsconfig.json     # TypeScript config
+```
+
+### Commit Convention
+Use conventional commits:
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation
+- `refactor:` Code refactoring
+
+Example: `feat: add gradient support`
+
+---
+
+## Need Help?
+
+- Open a GitHub discussion
+- Check existing issues
+- Create an issue with the "question" label
+
+By contributing, you agree that your contributions will be licensed under the MIT License.

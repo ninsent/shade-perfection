@@ -1,0 +1,46 @@
+# Changelog
+
+All notable changes to Shade Perfection will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+
+## [1.1.0] - 2025-10-12
+
+### Fixed
+- Frames automatically bind to their corresponding color variables
+
+### Changed
+- Complete code architecture refactor with modular structure
+- Separated concerns into dedicated classes (ColorMath, SuperellipseMath, ColorGenerator, etc.)
+- Implemented Observer pattern for state management
+- Improved code documentation with comprehensive JSDoc comments
+
+### Improved
+- Minor performance optimizations in color generation
+- Enhanced error handling and stability
+
+### Added
+- Comprehensive README documentation
+- Contributing guidelines
+
+## [1.0.1] - 2025-08-07
+
+### Improved
+- Improved positioning of created frames
+
+## [1.0.0] - 2025-08-03
+
+### Added
+- Initial public release
+- Superellipse curve implementation for color distribution
+- Basic color generation with adjustable parameters
+- Color picker with real-time curve visualization
+- Export to Figma as color frames
+- Contrast control (0.1-5.0)
+- Color count adjustment (1-50)
+- Reverse order option
+- Smart Spacing feature for proportional color distribution
+- RGB format support alongside HEX
+- Figma variables integration
+- Black & White color endpoints option
+- 9 professional color presets (Atlantic Blue, Himmel Blue, Iceberg Teal, etc.)

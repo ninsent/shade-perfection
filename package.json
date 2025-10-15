@@ -1,7 +1,7 @@
 {
   "name": "shade-perfection",
   "version": "1.2.0",
-  "description": "Your Figma Plugin",
+  "description": "Figma plugin for generating mathematically balanced color shades and tints",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

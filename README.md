@@ -7,18 +7,19 @@ Uses superellipse curves to create natural color progressions with mathematical 
 
 **[Try it on Figma Community](https://www.figma.com/community/plugin/1525180972449816271/shade-perfection)**
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/ninsent/shade-perfection) [![License](https://img.shields.io/badge/license-MIT-teallight.svg)](LICENSE) [![Figma](https://img.shields.io/badge/Figma-Plugin-orange.svg)](https://www.figma.com/community/plugin/1525180972449816271/shade-perfection) 
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/ninsent/shade-perfection) [![License](https://img.shields.io/badge/license-MIT-teallight.svg)](LICENSE) [![Figma](https://img.shields.io/badge/Figma-Plugin-orange.svg)](https://www.figma.com/community/plugin/1525180972449816271/shade-perfection) 
 
 ## Features
 
-- **Natural Distribution** — Uses superellipse curves ((x/a)^n + (y/b)^n = 1) for perfect color distribution
+- **Natural Distribution** — Uses superellipse curves `((x/a)^n + (y/b)^n = 1)` for perfect color distribution
 - **Smart Spacing** — Proportional color distribution based on selected color position
 - **Contrast Control** — Power distribution for custom contrast levels
 - **Black & White** — Optional pure black and white endpoints
 - **Figma Variables** — Import as native Figma color variables with automatic binding
-- **9 Presets** — Beautiful pre-configured color palettes
+- **10 Presets** — Beautiful pre-configured color palettes
 - **HEX/RGB** — Switch between color formats
 - **Reverse Order** — Flip palette from dark to light or light to dark
+- **Saturation** — Smooth palettes for neutral colors such as `cool gray` or `warm gray`
 
 ---
 
@@ -188,17 +189,42 @@ Both algorithms replace the standard linear distribution. When Smart Spacing is 
 
 ```javascript
 const CONFIG = {
-  PALETTE_SIZE: 180,              // Canvas size
-  CURVE_RESOLUTION_BASE: 200,     // Curve points
-  SUPERELLIPSE_N_MIN: 0.1,        // Min exponent
-  SUPERELLIPSE_N_MAX: 25,         // Max exponent
-  CONTRAST_MIN: 0.1,              // Min contrast
-  CONTRAST_MAX: 5.0,              // Max contrast
-  COLOR_COUNT_MIN: 1,             // Min colors
-  COLOR_COUNT_MAX: 50,            // Max colors
-  TOOLTIP_DELAY: 1000,            // ms
-  DRAG_SENSITIVITY: 0.3           // Icon drag speed
-};
+      // Canvas dimensions
+      PALETTE_SIZE: 180,
+      HUE_SLIDER_SIZE: 180,
+
+      // Curve calculation
+      CURVE_RESOLUTION: 400,
+      SUPERELLIPSE_N_MIN: 0.1,
+      SUPERELLIPSE_N_MAX: 25,
+      SUPERELLIPSE_TOLERANCE: 0.001,
+      SUPERELLIPSE_MAX_ITERATIONS: 100,
+
+      // Input constraints
+      CONTRAST_MIN: 0.1,
+      CONTRAST_MAX: 5.0,
+      CONTRAST_STEP: 0.1,
+      COLOR_COUNT_MIN: 1,
+      COLOR_COUNT_MAX: 50,
+
+      // Saturation control
+      SATURATION_MIN: 0,
+      SATURATION_MAX: 100,
+      SATURATION_DEFAULT: 100,
+      SATURATION_MIN_THRESHOLD: 1,
+
+      // UI interactions
+      DRAG_SENSITIVITY: 0.3,
+      TOOLTIP_DELAY: 1000,
+      ERROR_TOOLTIP_DELAY: 500,
+      TAB_TRANSITION_DELAY: 150,
+
+      // Visual styles
+      CURVE_STROKE_WIDTH: 2,
+      CURVE_PRIMARY_OPACITY: 0.9,
+      CURVE_SECONDARY_OPACITY: 0.4,
+      POINT_SECONDARY_OPACITY: 0.85,
+    };
 ```
 
 ### Adding New Presets
@@ -208,7 +234,8 @@ const PRESET_DATA = {
   'Your-Preset': {
     name: 'Your Preset Name',
     color: '#HEX_VALUE',
-    contrast: 1.0  // 0.1-5.0
+    contrast: 1.0,  // 0.1-5.0
+    saturation: 100 //0%-100%
   }
 };
 ```
@@ -236,11 +263,11 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 
 ## Changelog
 
-### [1.1.0] - 2025-10-12
+### [1.2.0] - 2025-10-16
 
-- Fixed: Frames now properly bind to color variables
-- Improved: Complete code architecture refactor & Minor performance optimizations
-- Added: Comprehensive README documentation
+- Added: Global saturation control (0-100%) with curve visualization & Warm/Cool Gray presets
+- Changed: Palette generation algorithm & Rebalanced all preset configurations
+- Fixed: Icon positioning & Package.json metadata
 
 Check the [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes.
 

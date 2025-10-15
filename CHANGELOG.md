@@ -4,6 +4,28 @@ All notable changes to Shade Perfection will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## [1.2.0] - 2025-10-16
+
+### Added
+- Global saturation control slider for creating muted color palettes (0-100%)
+- Desaturated curve visualization showing compressed superellipse
+- Secondary distribution points on desaturated curve
+- Real-time saturation value display
+- Warm Gray preset (10% saturation)
+- Cool Gray preset (30% saturation)
+
+### Changed
+- Color palette generation now based on desaturated curve projection
+- All preset colors and contrast values rebalanced for better consistency
+- Enhanced code structure and organization
+
+### Fixed
+- Contrast and color count icon positioning
+- Package.json metadata information
+
+### Removed
+- Iceberg Teal preset
+
 ## [1.1.0] - 2025-10-12
 
 ### Fixed

@@ -7,9 +7,9 @@
   <title>Shade Perfection - Color Palette Generator</title>
   <style>
     /* ============================================================================
-   SHADE PERFECTION - FIGMA PLUGIN
-   by Nursultan Akim
-   ============================================================================ */
+    SHADE PERFECTION - FIGMA PLUGIN
+    by Nursultan Akim
+    ============================================================================ */
 
     /* ============================================================================
     DESIGN TOKENS & CSS VARIABLES
@@ -63,8 +63,11 @@
       --shadow-lg: 0 3px 15px rgba(0, 0, 0, 0.1);
 
       /* Z-index Layers */
+      --z-base: 1;
       --z-curve: 5;
+      --z-curve-secondary: 6;
       --z-points: 8;
+      --z-points-secondary: 7;
       --z-handle: 10;
       --z-tooltip: 1000;
     }
@@ -109,10 +112,6 @@
       margin: 0;
     }
 
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
-
     /* ============================================================================
     LAYOUT STRUCTURE
     ============================================================================ */
@@ -126,7 +125,7 @@
       padding: var(--spacing-xxl);
       gap: var(--spacing-xl);
       width: 462px;
-      height: 438px;
+      height: 462px;
       background: var(--figma-color-bg);
       border-radius: var(--spacing-md);
       position: relative;
@@ -141,7 +140,7 @@
       padding: 0;
       gap: var(--spacing-xl);
       width: 204px;
-      height: 402px;
+      height: 426px;
     }
 
     /* Results Panel (Right Side) */
@@ -151,7 +150,7 @@
       align-items: flex-start;
       padding: 0;
       width: 214.5px;
-      height: 402px;
+      height: 426px;
       margin-left: calc(var(--spacing-xs) * -1);
       margin-right: calc(var(--spacing-sm) * -1.5);
     }
@@ -293,7 +292,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding: var(--spacing-sm);
+      padding: 0;
       gap: 1px;
       width: 128px;
       height: 24px;
@@ -541,7 +540,7 @@
       cursor: grabbing;
     }
 
-    /* Distribution Points on Curve */
+    /* Distribution Points on Main Curve */
     .distribution-point {
       position: absolute;
       width: 6px;
@@ -563,6 +562,90 @@
       height: 180px;
       pointer-events: none;
       z-index: var(--z-curve);
+    }
+
+    /* Desaturated (Secondary) Curve Visualization */
+    .desaturated-curve {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 180px;
+      height: 180px;
+      pointer-events: none;
+      z-index: var(--z-curve-secondary);
+    }
+
+    /* Distribution Points on Desaturated Curve */
+    .distribution-point-secondary {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border: 0.75px solid rgba(255, 255, 255, 0.75);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0.75px 3px rgba(0, 0, 0, 0.3);
+      z-index: var(--z-points-secondary);
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    /* ============================================================================
+    SATURATION CONTROLS
+    ============================================================================ */
+
+    .saturation-controls {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0;
+      gap: var(--spacing-md);
+      width: 204px;
+      height: 18px;
+      margin-top: -6px;
+    }
+
+    /* Saturation Value Display */
+    .saturation-value-display {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 18px;
+      height: 18px;
+      background: var(--figma-color-bg-secondary);
+      border-radius: var(--radius-sm);
+      font-size: 9px;
+      line-height: 9px;
+      color: var(--figma-color-text);
+      font-weight: 500;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    /* Saturation Slider */
+    .saturation-slider {
+      width: 180px;
+      height: 18px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(90deg,
+          #808080 0%,
+          #077be4 100%);
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Saturation Handle */
+    .saturation-handle {
+      position: absolute;
+      width: 9px;
+      height: 18px;
+      border: 1.5px solid #ffffff;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      top: 50%;
+      transform: translate(-50%, -50%);
+      left: 81%;
     }
 
     /* ============================================================================
@@ -613,7 +696,7 @@
       border: none;
       cursor: pointer;
       font-size: 12px;
-      z-index: 2;
+      z-index: var(--z-base);
       transition: color var(--transition-normal);
     }
 
@@ -655,7 +738,7 @@
       padding-top: var(--spacing-md);
       gap: var(--spacing-xs);
       width: 214px;
-      height: 372px;
+      height: 396px;
       overflow-y: auto;
       overflow-x: hidden;
       transition: opacity var(--transition-slow);
@@ -701,7 +784,7 @@
       flex-direction: column;
       align-items: center;
       width: 204px;
-      height: 292px;
+      height: 316px;
       gap: 3px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -782,6 +865,18 @@
       height: 18px;
       color: white;
       display: block;
+    }
+
+    .preset-saturation-container {
+      gap: 4px;
+    }
+
+    .preset-saturation {
+      font-size: 12px;
+      color: white;
+      margin: 0;
+      padding: 0;
+      line-height: 1;
     }
 
     /* ============================================================================
@@ -896,7 +991,7 @@
     }
 
     .figma-dark .colors-list::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(255, 255, 255, 0.4);
+      background-color: rgba(255, 255, 255, 0.5);
     }
 
     /* ============================================================================
@@ -1154,6 +1249,14 @@
         <div class="color-handle" id="colorHandle"></div>
       </div>
     </div>
+
+    <!-- Saturation Controls -->
+    <div class="saturation-controls">
+      <div class="saturation-value-display" id="saturationValueDisplay">60</div>
+      <div class="saturation-slider" id="saturationSlider">
+        <div class="saturation-handle" id="saturationHandle"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Result Section -->
@@ -1220,7 +1323,7 @@
     // ============================================================================
     // SHADE PERFECTION - FIGMA PLUGIN
     // by Nursultan Akim
-
+    //
     // Sections:
     // 1. Configuration & Constants
     // 2. Color Mathematics Module
@@ -1239,22 +1342,41 @@
     // ============================================================================
 
     const CONFIG = {
-      PALETTE_SIZE: 180, // Size in pixels for the color palette canvas
-      HUE_SLIDER_SIZE: 180, // Height of hue slider
-      CURVE_RESOLUTION: 400, // Resolution for superellipse curve
+      // Canvas dimensions
+      PALETTE_SIZE: 180,
+      HUE_SLIDER_SIZE: 180,
+
+      // Curve calculation
+      CURVE_RESOLUTION: 400,
       SUPERELLIPSE_N_MIN: 0.1,
       SUPERELLIPSE_N_MAX: 25,
       SUPERELLIPSE_TOLERANCE: 0.001,
       SUPERELLIPSE_MAX_ITERATIONS: 100,
+
+      // Input constraints
       CONTRAST_MIN: 0.1,
       CONTRAST_MAX: 5.0,
       CONTRAST_STEP: 0.1,
       COLOR_COUNT_MIN: 1,
       COLOR_COUNT_MAX: 50,
+
+      // Saturation control
+      SATURATION_MIN: 0,
+      SATURATION_MAX: 100,
+      SATURATION_DEFAULT: 100,
+      SATURATION_MIN_THRESHOLD: 1,
+
+      // UI interactions
       DRAG_SENSITIVITY: 0.3,
       TOOLTIP_DELAY: 1000,
       ERROR_TOOLTIP_DELAY: 500,
       TAB_TRANSITION_DELAY: 150,
+
+      // Visual styles
+      CURVE_STROKE_WIDTH: 2,
+      CURVE_PRIMARY_OPACITY: 0.9,
+      CURVE_SECONDARY_OPACITY: 0.4,
+      POINT_SECONDARY_OPACITY: 0.85,
     };
 
     const FEATURE_TOOLTIPS = {
@@ -1266,15 +1388,16 @@
     };
 
     const PRESET_DATA = {
-      'Atlantic-Blue': { name: 'Atlantic Blue', color: '#105FE7', contrast: 0.8 },
-      'Himmel-Blue': { name: 'Himmel Blue', color: '#1192E8', contrast: 1.5 },
-      'Iceberg-Teal': { name: 'Iceberg Teal', color: '#15D0D6', contrast: 1.2 },
-      'Steppe-Green': { name: 'Steppe Green', color: '#25C454', contrast: 1.2 },
-      'Wheat-Yellow': { name: 'Wheat Yellow', color: '#C59E02', contrast: 1.5 },
-      'Fox-Orange': { name: 'Fox Orange', color: '#E36912', contrast: 0.9 },
-      'Santa-Red': { name: 'Santa Red', color: '#D91E28', contrast: 1.0 },
-      'Sakura-Magenta': { name: 'Sakura Magenta', color: '#CC276E', contrast: 1.2 },
-      'Amethyst-Purple': { name: 'Amethyst Purple', color: '#691AE0', contrast: 1.0 },
+      'Warm-Gray': { name: 'Warm Gray', color: '#BF3F1F', contrast: 1, saturation: 10 },
+      'Cool-Gray': { name: 'Cool Gray', color: '#1F54BF', contrast: 1, saturation: 30 },
+      'Atlantic-Blue': { name: 'Atlantic Blue', color: '#105FE7', contrast: 0.8, saturation: 100 },
+      'Himmel-Blue': { name: 'Himmel Blue', color: '#18A2CC', contrast: 1.2, saturation: 100 },
+      'Steppe-Green': { name: 'Steppe Green', color: '#25C454', contrast: 1.4, saturation: 100 },
+      'Wheat-Yellow': { name: 'Wheat Yellow', color: '#D5AF1B', contrast: 1, saturation: 100 },
+      'Fox-Orange': { name: 'Fox Orange', color: '#E36912', contrast: 0.7, saturation: 100 },
+      'Santa-Red': { name: 'Santa Red', color: '#D91E28', contrast: 0.8, saturation: 100 },
+      'Sakura-Magenta': { name: 'Sakura Pink', color: '#CC27AB', contrast: 1.2, saturation: 100 },
+      'Amethyst-Purple': { name: 'Amethyst Purple', color: '#7102EF', contrast: 0.9, saturation: 100 },
     };
 
     // ============================================================================
@@ -1303,7 +1426,7 @@
         else if (h < 180) [r, g, b] = [0, c, x];
         else if (h < 240) [r, g, b] = [0, x, c];
         else if (h < 300) [r, g, b] = [x, 0, c];
-        else[r, g, b] = [c, 0, x];
+        else [r, g, b] = [c, 0, x];
 
         return '#' + [r, g, b]
           .map(val => Math.round((val + m) * 255).toString(16).padStart(2, '0'))
@@ -1384,6 +1507,38 @@
       }
 
       /**
+       * Calculate desaturated version of a color by projecting onto a compressed superellipse curve.
+       * This creates a palette with reduced saturation while maintaining the color relationships.
+       * 
+       * @param {number} h - Hue (0-360)
+       * @param {number} s - Saturation (0-100)
+       * @param {number} v - Value/Brightness (0-100)
+       * @param {number} saturationPercent - Target saturation percentage (0-100)
+       * @returns {string} HEX color string for desaturated color
+       */
+      static getDesaturatedColor(h, s, v, saturationPercent) {
+        if (saturationPercent >= CONFIG.SATURATION_MAX) {
+          return this.hsvToHex(h, s, v);
+        }
+
+        const x = s / 100;
+        const y = v / 100;
+
+        const n = SuperellipseMath.findExponent(x, y);
+        const mainCurve = SuperellipseMath.generateCurvePoints(n);
+        const selectedPoint = SuperellipseMath.findClosestPoint(x, y, mainCurve);
+        const arcLength = selectedPoint.normalizedArcLength;
+
+        const desaturatedCurve = SuperellipseMath.generateDesaturatedCurve(n, saturationPercent);
+        const desaturatedPoint = SuperellipseMath.findPointAtArcLength(arcLength, desaturatedCurve);
+
+        const newS = desaturatedPoint.x * 100;
+        const newV = desaturatedPoint.y * 100;
+
+        return this.hsvToHex(h, newS, newV);
+      }
+
+      /**
        * Parses RGB string format "rgb(r, g, b)"
        * @param {string} rgbString - RGB string
        * @returns {Object|null} RGB object {r, g, b} or null if invalid
@@ -1406,7 +1561,6 @@
        */
       static getContrastTextColor(hexColor) {
         const { r, g, b } = this.hexToRgb(hexColor);
-        // Weighted luminance calculation
         const luminance = (0.250 * r + 0.350 * g + 0.150 * b) / 255;
         return luminance > 0.4 ? 'black' : 'white';
       }
@@ -1426,15 +1580,16 @@
        * @returns {number} Exponent n for the superellipse
        */
       static findExponent(x, y) {
-        // Handle edge cases
-        if (x <= 0.001 && y <= 0.001) return CONFIG.SUPERELLIPSE_N_MIN;
-        if (x <= 0.001 || y <= 0.001) return CONFIG.SUPERELLIPSE_N_MIN;
-        if (x >= 0.99 && y >= 0.99) return CONFIG.SUPERELLIPSE_N_MAX;
+        const minThreshold = 0.001;
+        const maxThreshold = 0.99;
+
+        if (x <= minThreshold && y <= minThreshold) return CONFIG.SUPERELLIPSE_N_MIN;
+        if (x <= minThreshold || y <= minThreshold) return CONFIG.SUPERELLIPSE_N_MIN;
+        if (x >= maxThreshold && y >= maxThreshold) return CONFIG.SUPERELLIPSE_N_MAX;
 
         let nMin = CONFIG.SUPERELLIPSE_N_MIN;
         let nMax = CONFIG.SUPERELLIPSE_N_MAX;
 
-        // Binary search for optimal n value
         for (let i = 0; i < CONFIG.SUPERELLIPSE_MAX_ITERATIONS; i++) {
           const nMid = (nMin + nMax) / 2;
           const f = Math.pow(x, nMid) + Math.pow(y, nMid) - 1;
@@ -1452,26 +1607,23 @@
       }
 
       /**
-       * Generates points along the superellipse curve
+       * Generates points along the superellipse curve with arc length parameterization
        * @param {number} n - Superellipse exponent
        * @returns {Array} Array of curve points with positions and arc lengths
        */
       static generateCurvePoints(n) {
         const points = [];
         let totalArcLength = 0;
-
-        // Use consistent high resolution for all curves
         const resolution = CONFIG.CURVE_RESOLUTION;
+        const minSegmentLength = 1e-10;
 
         for (let i = 0; i <= resolution; i++) {
           const t = ((i / resolution) * Math.PI) / 2;
 
           try {
-            // Calculate point on superellipse using parametric equations
             const px = Math.pow(Math.cos(t), 2 / n);
             const py = Math.pow(Math.sin(t), 2 / n);
 
-            // Clamp values to valid range
             const clampedX = Math.max(0, Math.min(1, px));
             const clampedY = Math.max(0, Math.min(1, py));
 
@@ -1484,14 +1636,13 @@
               arcLength: totalArcLength
             };
 
-            // Calculate arc length for this segment
             if (i > 0) {
               const prevPoint = points[i - 1];
               const dx = point.x - prevPoint.x;
               const dy = point.y - prevPoint.y;
               const segmentLength = Math.sqrt(dx * dx + dy * dy);
 
-              if (segmentLength > 1e-10) {
+              if (segmentLength > minSegmentLength) {
                 totalArcLength += segmentLength;
               }
               point.arcLength = totalArcLength;
@@ -1503,7 +1654,6 @@
           }
         }
 
-        // Normalize arc lengths to 0-1 range
         if (totalArcLength > 0) {
           points.forEach(point => {
             point.normalizedArcLength = point.arcLength / totalArcLength;
@@ -1518,18 +1668,92 @@
       }
 
       /**
-       * Finds the closest point on the curve to target coordinates
+       * Generates points along a compressed (desaturated) superellipse curve.
+       * The curve is compressed along the x-axis to create lower saturation values
+       * while maintaining the same brightness distribution.
+       * 
+       * @param {number} nMain - Main superellipse exponent
+       * @param {number} saturationPercent - Saturation percentage (0-100)
+       * @returns {Array} Array of curve points for desaturated curve
+       */
+      static generateDesaturatedCurve(nMain, saturationPercent) {
+        const points = [];
+        const minCompressionFactor = 0.005;
+        const minSegmentLength = 1e-10;
+
+        const a = Math.max(minCompressionFactor, saturationPercent / 100);
+        const nSecondary = 1 + (nMain - 1) * (saturationPercent / 100);
+
+        let totalArcLength = 0;
+        const resolution = CONFIG.CURVE_RESOLUTION;
+
+        for (let i = 0; i <= resolution; i++) {
+          const t = ((i / resolution) * Math.PI) / 2;
+
+          try {
+            const px = a * Math.pow(Math.cos(t), 2 / nSecondary);
+            const py = Math.pow(Math.sin(t), 2 / nSecondary);
+
+            const clampedX = Math.max(0, Math.min(1, px));
+            const clampedY = Math.max(0, Math.min(1, py));
+
+            const point = {
+              t,
+              x: clampedX,
+              y: clampedY,
+              pixelX: clampedX * CONFIG.PALETTE_SIZE,
+              pixelY: (1 - clampedY) * CONFIG.PALETTE_SIZE,
+              arcLength: totalArcLength
+            };
+
+            if (i > 0) {
+              const prevPoint = points[i - 1];
+              const dx = point.x - prevPoint.x;
+              const dy = point.y - prevPoint.y;
+              const segmentLength = Math.sqrt(dx * dx + dy * dy);
+
+              if (segmentLength > minSegmentLength) {
+                totalArcLength += segmentLength;
+              }
+              point.arcLength = totalArcLength;
+            }
+
+            points.push(point);
+          } catch (e) {
+            continue;
+          }
+        }
+
+        if (totalArcLength > 0) {
+          points.forEach(point => {
+            point.normalizedArcLength = point.arcLength / totalArcLength;
+          });
+        } else {
+          points.forEach((point, index) => {
+            point.normalizedArcLength = index / (points.length - 1);
+          });
+        }
+
+        return points;
+      }
+
+      /**
+       * Finds the closest point on the curve to target coordinates using
+       * optimized local search with line segment projection
+       * 
        * @param {number} targetX - Target X coordinate
        * @param {number} targetY - Target Y coordinate
        * @param {Array} curvePoints - Array of curve points
-       * @returns {Object} Closest point on the curve
+       * @returns {Object} Closest point on the curve with arc length
        */
       static findClosestPoint(targetX, targetY, curvePoints) {
+        const searchRadius = 3;
+        const minSegmentLength = 1e-10;
+
         let closestPoint = curvePoints[0];
         let minDistance = Infinity;
         let closestIndex = 0;
 
-        // Find approximate closest point
         curvePoints.forEach((point, index) => {
           const dx = point.x - targetX;
           const dy = point.y - targetY;
@@ -1542,15 +1766,12 @@
           }
         });
 
-        // Refine search in local neighborhood
-        const searchRadius = 3;
         const startIdx = Math.max(0, closestIndex - searchRadius);
         const endIdx = Math.min(curvePoints.length - 1, closestIndex + searchRadius);
 
         let bestPoint = closestPoint;
         let bestDistance = minDistance;
 
-        // Check line segments for more precise point
         for (let i = startIdx; i < endIdx; i++) {
           const p1 = curvePoints[i];
           const p2 = curvePoints[i + 1];
@@ -1562,8 +1783,7 @@
 
           const segmentLengthSq = segmentVecX * segmentVecX + segmentVecY * segmentVecY;
 
-          if (segmentLengthSq > 1e-10) {
-            // Project target point onto line segment
+          if (segmentLengthSq > minSegmentLength) {
             const t = Math.max(0, Math.min(1,
               (toTargetX * segmentVecX + toTargetY * segmentVecY) / segmentLengthSq
             ));
@@ -1592,7 +1812,7 @@
       }
 
       /**
-       * Finds point at specific arc length position on curve
+       * Finds point at specific arc length position on curve using linear interpolation
        * @param {number} normalizedArcLength - Normalized arc length (0-1)
        * @param {Array} curvePoints - Array of curve points
        * @returns {Object} Point at specified arc length
@@ -1601,14 +1821,12 @@
         if (normalizedArcLength <= 0) return curvePoints[0];
         if (normalizedArcLength >= 1) return curvePoints[curvePoints.length - 1];
 
-        // Find segment containing target arc length
         for (let i = 1; i < curvePoints.length; i++) {
           const prevPoint = curvePoints[i - 1];
           const currPoint = curvePoints[i];
 
           if (normalizedArcLength >= prevPoint.normalizedArcLength &&
             normalizedArcLength <= currPoint.normalizedArcLength) {
-            // Interpolate between points
             const t = (normalizedArcLength - prevPoint.normalizedArcLength) /
               (currPoint.normalizedArcLength - prevPoint.normalizedArcLength);
 
@@ -1631,40 +1849,43 @@
 
     class ColorGenerator {
       /**
-       * Generates color palette distributed along superellipse curve
+       * Generates color palette distributed along superellipse curve.
+       * Colors are calculated based on desaturated curve positions for consistent saturation control.
+       * 
        * @param {Object} params - Generation parameters
-       * @returns {Array} Array of generated colors
+       * @param {number} params.hue - Hue value (0-360)
+       * @param {number} params.saturation - Saturation value (0-100)
+       * @param {number} params.value - Brightness value (0-100)
+       * @param {number} params.colorCount - Number of colors to generate
+       * @param {number} params.contrast - Contrast distribution factor
+       * @param {boolean} params.smartSpacing - Whether to use adaptive spacing
+       * @param {boolean} params.includeBlackWhite - Whether to add black and white
+       * @param {number} params.saturationControl - Global saturation control (0-100)
+       * @returns {Object} Object containing colors array and curve points
        */
       static generatePalette(params) {
-        const { hue, saturation, value, colorCount, contrast, smartSpacing, includeBlackWhite } = params;
+        const { hue, saturation, value, colorCount, contrast, smartSpacing, includeBlackWhite, saturationControl } = params;
 
-        // Normalize saturation and value to 0-1 range
-        const x = saturation / 100;
-        const y = value / 100;
+        const normalizedX = saturation / 100;
+        const normalizedY = value / 100;
 
-        // Find superellipse exponent and generate curve
-        const n = SuperellipseMath.findExponent(x, y);
+        const n = SuperellipseMath.findExponent(normalizedX, normalizedY);
         const curvePoints = SuperellipseMath.generateCurvePoints(n);
 
-        // Find selected color position on curve
-        const selectedPoint = SuperellipseMath.findClosestPoint(x, y, curvePoints);
+        const selectedPoint = SuperellipseMath.findClosestPoint(normalizedX, normalizedY, curvePoints);
         const selectedArcLength = selectedPoint.normalizedArcLength;
 
         const colors = [];
         const count = parseInt(colorCount);
         const pointsToDistribute = count - 1;
 
-        // Determine distribution strategy
         const useContrastMode = contrast !== 1.0;
         let pointsBefore, pointsAfter;
 
         if (smartSpacing && !useContrastMode) {
-          // Smart Spacing: proportional distribution based on selected color position
-          const totalPoints = pointsToDistribute;
-          pointsBefore = Math.round(selectedArcLength * totalPoints);
-          pointsAfter = totalPoints - pointsBefore;
+          pointsBefore = Math.round(selectedArcLength * pointsToDistribute);
+          pointsAfter = pointsToDistribute - pointsBefore;
 
-          // Ensure at least one point on each side if possible
           if (pointsBefore === 0 && pointsAfter > 1) {
             pointsBefore = 1;
             pointsAfter = pointsAfter - 1;
@@ -1673,7 +1894,6 @@
             pointsBefore = pointsBefore - 1;
           }
         } else {
-          // Standard distribution: balanced or contrast-based
           if (count % 2 === 0) {
             const smallerSegment = Math.floor(pointsToDistribute / 2);
             const largerSegment = Math.ceil(pointsToDistribute / 2);
@@ -1694,59 +1914,118 @@
           }
         }
 
-        // Generate colors before selected color
+        const saturationPercent = saturationControl !== undefined ? saturationControl : CONFIG.SATURATION_DEFAULT;
+        const desaturatedCurvePoints = SuperellipseMath.generateDesaturatedCurve(n, saturationPercent);
+
         for (let i = 0; i < pointsBefore; i++) {
           const arcLength = this._calculateArcLength(
             i, pointsBefore, selectedArcLength, contrast, useContrastMode, true
           );
 
-          const point = SuperellipseMath.findPointAtArcLength(arcLength, curvePoints);
-          const s = point.x * 100;
-          const v = point.y * 100;
+          const mainPoint = SuperellipseMath.findPointAtArcLength(arcLength, curvePoints);
+          const mainS = mainPoint.x * 100;
+          const mainV = mainPoint.y * 100;
+          const mainHex = ColorMath.hsvToHex(hue, mainS, mainV);
+
+          const desaturatedPoint = SuperellipseMath.findPointAtArcLength(arcLength, desaturatedCurvePoints);
+          const s = desaturatedPoint.x * 100;
+          const v = desaturatedPoint.y * 100;
           const hex = ColorMath.hsvToHex(hue, s, v);
 
-          colors.push({ hex, s, v, arcLength });
+          colors.push({
+            hex,
+            s,
+            v,
+            arcLength,
+            mainS,
+            mainV,
+            mainHex
+          });
         }
 
-        // Add selected color
+        const selectedDesaturatedPoint = SuperellipseMath.findPointAtArcLength(selectedArcLength, desaturatedCurvePoints);
+        const selectedS = selectedDesaturatedPoint.x * 100;
+        const selectedV = selectedDesaturatedPoint.y * 100;
+        const selectedMainHex = ColorMath.hsvToHex(hue, saturation, value);
+
         colors.push({
-          hex: ColorMath.hsvToHex(hue, saturation, value),
-          s: saturation,
-          v: value,
+          hex: ColorMath.hsvToHex(hue, selectedS, selectedV),
+          s: selectedS,
+          v: selectedV,
           arcLength: selectedArcLength,
-          isSelected: true
+          isSelected: true,
+          mainS: saturation,
+          mainV: value,
+          mainHex: selectedMainHex
         });
 
-        // Generate colors after selected color
         for (let i = 0; i < pointsAfter; i++) {
           const arcLength = this._calculateArcLength(
             i, pointsAfter, selectedArcLength, contrast, useContrastMode, false
           );
 
-          const point = SuperellipseMath.findPointAtArcLength(arcLength, curvePoints);
-          const s = point.x * 100;
-          const v = point.y * 100;
+          const mainPoint = SuperellipseMath.findPointAtArcLength(arcLength, curvePoints);
+          const mainS = mainPoint.x * 100;
+          const mainV = mainPoint.y * 100;
+          const mainHex = ColorMath.hsvToHex(hue, mainS, mainV);
+
+          const desaturatedPoint = SuperellipseMath.findPointAtArcLength(arcLength, desaturatedCurvePoints);
+          const s = desaturatedPoint.x * 100;
+          const v = desaturatedPoint.y * 100;
           const hex = ColorMath.hsvToHex(hue, s, v);
 
-          colors.push({ hex, s, v, arcLength });
+          colors.push({
+            hex,
+            s,
+            v,
+            arcLength,
+            mainS,
+            mainV,
+            mainHex
+          });
         }
 
-        // Add black and white if enabled
         if (includeBlackWhite) {
-          colors.unshift({ hex: '#000000', s: 0, v: 0, arcLength: 0, isBlack: true });
-          colors.push({ hex: '#FFFFFF', s: 0, v: 100, arcLength: 1, isWhite: true });
+          colors.unshift({
+            hex: '#000000',
+            s: 0,
+            v: 0,
+            arcLength: 0,
+            isBlack: true,
+            mainS: 0,
+            mainV: 0,
+            mainHex: '#000000'
+          });
+          colors.push({
+            hex: '#FFFFFF',
+            s: 0,
+            v: 100,
+            arcLength: 1,
+            isWhite: true,
+            mainS: 0,
+            mainV: 100,
+            mainHex: '#FFFFFF'
+          });
         }
 
-        return { colors, curvePoints };
+        return { colors, curvePoints, desaturatedCurvePoints };
       }
 
       /**
-       * Calculates arc length position with optional contrast distribution
+       * Calculates arc length position with optional contrast-based distribution.
+       * Applies power function for non-linear spacing when contrast is enabled.
+       * 
+       * @param {number} index - Current index in the distribution
+       * @param {number} total - Total number of points to distribute
+       * @param {number} selectedArc - Arc length of selected point
+       * @param {number} contrast - Contrast factor
+       * @param {boolean} useContrast - Whether to apply contrast distribution
+       * @param {boolean} isBefore - Whether point is before or after selected point
+       * @returns {number} Calculated arc length position
        * @private
        */
       static _calculateArcLength(index, total, selectedArc, contrast, useContrast, isBefore) {
         if (!useContrast) {
-          // Linear distribution
           if (isBefore) {
             return (selectedArc / (total + 1)) * (index + 1);
           } else {
@@ -1754,19 +2033,25 @@
           }
         }
 
-        // Contrast-based power distribution
         const normalizedDistance = (isBefore ? (total - index) : (index + 1)) / (total + 1);
         let poweredDistance;
 
-        if (contrast > 1.0) {
-          const t = Math.min((contrast - 1.0) / 4.0, 1.0);
+        const contrastHighThreshold = 1.0;
+        const contrastLowThreshold = 1.0;
+        const contrastHighExponent = 1.5;
+        const contrastLowExponent = 1.5;
+        const maxContrastRange = 4.0;
+        const minContrastRange = 0.9;
+
+        if (contrast > contrastHighThreshold) {
+          const t = Math.min((contrast - contrastHighThreshold) / maxContrastRange, 1.0);
           const linear = normalizedDistance;
-          const curved = Math.pow(normalizedDistance, 1 / 1.5);
+          const curved = Math.pow(normalizedDistance, 1 / contrastHighExponent);
           poweredDistance = linear * (1 - t) + curved * t;
-        } else if (contrast < 1.0) {
-          const t = Math.min((1.0 - contrast) / 0.9, 1.0);
+        } else if (contrast < contrastLowThreshold) {
+          const t = Math.min((contrastLowThreshold - contrast) / minContrastRange, 1.0);
           const linear = normalizedDistance;
-          const curved = Math.pow(normalizedDistance, 1.5);
+          const curved = Math.pow(normalizedDistance, contrastLowExponent);
           poweredDistance = linear * (1 - t) + curved * t;
         } else {
           poweredDistance = normalizedDistance;
@@ -1780,7 +2065,7 @@
       }
 
       /**
-       * Generates display names for colors
+       * Generates display names for colors based on their position in the palette
        * @param {Array} colors - Array of color objects
        * @param {string} baseName - Base name for the palette
        * @returns {Array} Colors with display names
@@ -1788,6 +2073,7 @@
       static generateColorNames(colors, baseName) {
         const mainColors = colors.filter(c => !c.isBlack && !c.isWhite);
         const totalMainColors = mainColors.length;
+        const nameMultiplier = 10;
 
         let colorCounter = 0;
         return colors.map(color => {
@@ -1798,7 +2084,7 @@
           } else if (color.isWhite) {
             displayName = 'White';
           } else {
-            const index = (totalMainColors - colorCounter) * 10;
+            const index = (totalMainColors - colorCounter) * nameMultiplier;
             displayName = `${baseName} ${index}`;
             colorCounter++;
           }
@@ -1815,17 +2101,15 @@
 
     class AppState {
       constructor() {
-        // Color values
         this.hue = 220;
         this.saturation = 81;
         this.value = 78;
+        this.saturationControl = CONFIG.SATURATION_DEFAULT;
 
-        // Generation settings
         this.colorCount = 10;
         this.contrast = 1.0;
         this.colorName = '';
 
-        // Feature toggles
         this.features = {
           importWithVariables: true,
           reverseOrder: false,
@@ -1834,15 +2118,12 @@
           rgbFormat: false
         };
 
-        // Generated data
         this.generatedColors = [];
         this.curvePoints = [];
 
-        // UI state
         this.isDragging = false;
         this.activeTab = 'result';
 
-        // Observers for state changes
         this.observers = new Set();
       }
 
@@ -1865,6 +2146,7 @@
       /**
        * Notify all observers of state change
        * @param {string} changeType - Type of change that occurred
+       * @private
        */
       _notify(changeType) {
         this.observers.forEach(callback => callback(changeType, this));
@@ -1872,6 +2154,9 @@
 
       /**
        * Update HSV color values
+       * @param {number} h - Hue (0-360)
+       * @param {number} s - Saturation (0-100)
+       * @param {number} v - Value (0-100)
        */
       updateColor(h, s, v) {
         this.hue = h;
@@ -1882,6 +2167,7 @@
 
       /**
        * Update generation settings
+       * @param {Object} settings - Settings to update
        */
       updateSettings(settings) {
         Object.assign(this, settings);
@@ -1890,6 +2176,7 @@
 
       /**
        * Toggle a feature on/off
+       * @param {string} featureName - Name of feature to toggle
        */
       toggleFeature(featureName) {
         if (featureName in this.features) {
@@ -1900,6 +2187,8 @@
 
       /**
        * Set a feature to specific state
+       * @param {string} featureName - Name of feature
+       * @param {boolean} value - New state
        */
       setFeature(featureName, value) {
         if (featureName in this.features) {
@@ -1909,7 +2198,9 @@
       }
 
       /**
-       * Update generated colors
+       * Update generated colors and curve data
+       * @param {Array} colors - Generated color array
+       * @param {Array} curvePoints - Curve points array
        */
       updateGeneratedColors(colors, curvePoints) {
         this.generatedColors = colors;
@@ -1919,6 +2210,7 @@
 
       /**
        * Get current color in HEX format
+       * @returns {string} HEX color string
        */
       getCurrentHex() {
         return ColorMath.hsvToHex(this.hue, this.saturation, this.value);
@@ -1926,6 +2218,7 @@
 
       /**
        * Get current color in RGB format
+       * @returns {Object} RGB object {r, g, b}
        */
       getCurrentRgb() {
         const hex = this.getCurrentHex();
@@ -1933,15 +2226,16 @@
       }
 
       /**
-       * Apply preset configuration
+       * Apply preset configuration to current state
+       * @param {Object} presetConfig - Preset configuration object
        */
       applyPreset(presetConfig) {
         const hsv = ColorMath.hexToHsv(presetConfig.color);
         this.updateColor(hsv.h, hsv.s, hsv.v);
         this.contrast = presetConfig.contrast;
         this.colorName = presetConfig.name;
+        this.saturationControl = presetConfig.saturation !== undefined ? presetConfig.saturation : CONFIG.SATURATION_DEFAULT;
 
-        // Reset smart spacing if active
         if (this.features.smartSpacing) {
           this.setFeature('smartSpacing', false);
         }
@@ -1969,7 +2263,16 @@
        * @private
        */
       _initializeEventListeners() {
-        // Hue slider interaction
+        this._initializeHueSlider();
+        this._initializeColorPalette();
+        this._initializeSaturationSlider();
+      }
+
+      /**
+       * Initialize hue slider interaction
+       * @private
+       */
+      _initializeHueSlider() {
         this.elements.hueSlider.addEventListener('mousedown', (e) => {
           e.preventDefault();
           this.isDragging = true;
@@ -1985,8 +2288,13 @@
           document.addEventListener('mousemove', onMove);
           document.addEventListener('mouseup', onUp);
         });
+      }
 
-        // Color palette interaction
+      /**
+       * Initialize color palette interaction
+       * @private
+       */
+      _initializeColorPalette() {
         this.elements.colorPalette.addEventListener('mousedown', (e) => {
           e.preventDefault();
           this.isDragging = true;
@@ -2005,7 +2313,32 @@
       }
 
       /**
+       * Initialize saturation slider interaction
+       * @private
+       */
+      _initializeSaturationSlider() {
+        if (!this.elements.saturationSlider) return;
+
+        this.elements.saturationSlider.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          this.isDragging = true;
+          this._updateSaturationControl(e);
+
+          const onMove = (e) => this.isDragging && this._updateSaturationControl(e);
+          const onUp = () => {
+            this.isDragging = false;
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onUp);
+          };
+
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onUp);
+        });
+      }
+
+      /**
        * Update hue based on mouse position
+       * @param {MouseEvent} e - Mouse event
        * @private
        */
       _updateHue(e) {
@@ -2018,6 +2351,7 @@
 
       /**
        * Update saturation and value based on mouse position
+       * @param {MouseEvent} e - Mouse event
        * @private
        */
       _updateSaturationValue(e) {
@@ -2032,28 +2366,48 @@
       }
 
       /**
+       * Update saturation control based on mouse position
+       * @param {MouseEvent} e - Mouse event
+       * @private
+       */
+      _updateSaturationControl(e) {
+        if (!this.elements.saturationSlider) return;
+
+        const rect = this.elements.saturationSlider.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+        const saturationControl = (x / rect.width) * 100;
+
+        this.state.saturationControl = saturationControl;
+        this.updateSaturationSlider();
+        this.drawDesaturatedCurve();
+        this.drawDesaturatedDistributionPoints();
+        this.state._notify('saturation-control');
+      }
+
+      /**
        * Update visual representation of color picker
        */
       updateVisuals() {
         const { hue, saturation, value } = this.state;
         const hex = this.state.getCurrentHex();
 
-        // Update palette background
         this.elements.colorPalette.style.background =
           `linear-gradient(to right, white, hsl(${hue}, 100%, 50%))`;
 
-        // Update color preview
         this.elements.colorPreview.style.background = hex;
         this.elements.colorHandle.style.background = hex;
 
-        // Update handle positions
         this.elements.colorHandle.style.left = (saturation / 100) * CONFIG.PALETTE_SIZE + 'px';
         this.elements.colorHandle.style.top = ((100 - value) / 100) * CONFIG.PALETTE_SIZE + 'px';
         this.elements.hueHandle.style.top = (hue / 360) * CONFIG.HUE_SLIDER_SIZE - 4.5 + 'px';
+        
+        this.updateSaturationSlider();
+        this.drawCurve();
+        this.drawDesaturatedCurve();
       }
 
       /**
-       * Draw superellipse curve on color palette
+       * Draw primary superellipse curve on color palette
        */
       drawCurve() {
         const x = this.state.saturation / 100;
@@ -2071,9 +2425,10 @@
 
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         const points = [];
+        const curveResolution = 100;
 
-        for (let i = 0; i <= 100; i++) {
-          const t = ((i / 100) * Math.PI) / 2;
+        for (let i = 0; i <= curveResolution; i++) {
+          const t = ((i / curveResolution) * Math.PI) / 2;
 
           try {
             const px = Math.pow(Math.cos(t), 2 / n);
@@ -2095,8 +2450,8 @@
           }
 
           path.setAttribute('d', pathData);
-          path.setAttribute('stroke', 'rgba(255, 255, 255, 0.9)');
-          path.setAttribute('stroke-width', '2');
+          path.setAttribute('stroke', `rgba(255, 255, 255, ${CONFIG.CURVE_PRIMARY_OPACITY})`);
+          path.setAttribute('stroke-width', CONFIG.CURVE_STROKE_WIDTH.toString());
           path.setAttribute('fill', 'none');
 
           svg.appendChild(path);
@@ -2104,24 +2459,136 @@
       }
 
       /**
-       * Draw distribution points on color palette
+       * Draw desaturated (secondary) superellipse curve on color palette
+       */
+      drawDesaturatedCurve() {
+        const x = this.state.saturation / 100;
+        const y = this.state.value / 100;
+        const nMain = SuperellipseMath.findExponent(x, y);
+        const saturationPercent = this.state.saturationControl;
+
+        const curvePoints = SuperellipseMath.generateDesaturatedCurve(nMain, saturationPercent);
+
+        let svg = this.elements.colorPalette.querySelector('.desaturated-curve');
+        if (!svg) {
+          svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.classList.add('desaturated-curve');
+          this.elements.colorPalette.appendChild(svg);
+        }
+
+        svg.innerHTML = '';
+
+        if (saturationPercent < CONFIG.SATURATION_MIN_THRESHOLD || curvePoints.length < 2) {
+          return;
+        }
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+        let pathData = `M ${curvePoints[0].pixelX} ${curvePoints[0].pixelY}`;
+        for (let i = 1; i < curvePoints.length; i++) {
+          pathData += ` L ${curvePoints[i].pixelX} ${curvePoints[i].pixelY}`;
+        }
+
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', `rgba(255, 255, 255, ${CONFIG.CURVE_SECONDARY_OPACITY})`);
+        path.setAttribute('stroke-width', CONFIG.CURVE_STROKE_WIDTH.toString());
+        path.setAttribute('fill', 'none');
+        svg.appendChild(path);
+      }
+
+      /**
+       * Draw distribution points on the main curve
        */
       drawDistributionPoints() {
-        // Remove existing points
         const existingPoints = this.elements.colorPalette.querySelectorAll('.distribution-point');
         existingPoints.forEach(point => point.remove());
 
-        // Draw new points
         this.state.generatedColors.forEach(color => {
           if (!color.isSelected && !color.isBlack && !color.isWhite) {
             const point = document.createElement('div');
             point.className = 'distribution-point';
-            point.style.left = (color.s / 100) * CONFIG.PALETTE_SIZE + 'px';
-            point.style.top = ((100 - color.v) / 100) * CONFIG.PALETTE_SIZE + 'px';
-            point.style.background = color.hex;
+
+            const posS = color.mainS !== undefined ? color.mainS : color.s;
+            const posV = color.mainV !== undefined ? color.mainV : color.v;
+            point.style.left = (posS / 100) * CONFIG.PALETTE_SIZE + 'px';
+            point.style.top = ((100 - posV) / 100) * CONFIG.PALETTE_SIZE + 'px';
+
+            const pointColor = color.mainHex !== undefined ? color.mainHex : color.hex;
+            point.style.background = pointColor;
+
             this.elements.colorPalette.appendChild(point);
           }
         });
+
+        this.drawDesaturatedDistributionPoints();
+      }
+
+      /**
+       * Draw distribution points on the desaturated curve
+       */
+      drawDesaturatedDistributionPoints() {
+        const existingPoints = this.elements.colorPalette.querySelectorAll('.distribution-point-secondary');
+        existingPoints.forEach(point => point.remove());
+
+        const saturationPercent = this.state.saturationControl;
+
+        if (saturationPercent < CONFIG.SATURATION_MIN_THRESHOLD) {
+          return;
+        }
+
+        const x = this.state.saturation / 100;
+        const y = this.state.value / 100;
+        const nMain = SuperellipseMath.findExponent(x, y);
+        const desaturatedCurvePoints = SuperellipseMath.generateDesaturatedCurve(nMain, saturationPercent);
+
+        if (desaturatedCurvePoints.length < 2) {
+          return;
+        }
+
+        this.state.generatedColors.forEach(color => {
+          if (color.isBlack || color.isWhite) {
+            return;
+          }
+
+          const targetArcLength = color.arcLength;
+          const projectedPoint = SuperellipseMath.findPointAtArcLength(targetArcLength, desaturatedCurvePoints);
+
+          if (!projectedPoint) {
+            return;
+          }
+
+          const point = document.createElement('div');
+          point.className = 'distribution-point-secondary';
+          point.style.left = projectedPoint.x * CONFIG.PALETTE_SIZE + 'px';
+          point.style.top = (1 - projectedPoint.y) * CONFIG.PALETTE_SIZE + 'px';
+          point.style.background = color.hex;
+
+          this.elements.colorPalette.appendChild(point);
+        });
+      }
+
+      /**
+       * Update saturation slider gradient and handle position
+       */
+      updateSaturationSlider() {
+        const { hue, value } = this.state;
+        const saturationControl = this.state.saturationControl;
+
+        const grayColor = ColorMath.hsvToHex(hue, 0, value);
+        const fullSatColor = ColorMath.hsvToHex(hue, 100, value);
+
+        if (this.elements.saturationSlider) {
+          this.elements.saturationSlider.style.background =
+            `linear-gradient(90deg, ${grayColor} 0%, ${fullSatColor} 100%)`;
+        }
+
+        if (this.elements.saturationHandle) {
+          this.elements.saturationHandle.style.left = `${saturationControl}%`;
+        }
+
+        if (this.elements.saturationValueDisplay) {
+          this.elements.saturationValueDisplay.textContent = Math.round(saturationControl);
+        }
       }
     }
 
@@ -2139,19 +2606,22 @@
           hueHandle: this.elements.hueHandle,
           colorPalette: this.elements.colorPalette,
           colorHandle: this.elements.colorHandle,
-          colorPreview: this.elements.colorPreview
+          colorPreview: this.elements.colorPreview,
+          saturationSlider: this.elements.saturationSlider,
+          saturationHandle: this.elements.saturationHandle,
+          saturationValueDisplay: this.elements.saturationValueDisplay
         });
 
         this._initializeEventListeners();
         this._initializeTooltips();
         this._initializeDragControls();
 
-        // Subscribe to state changes
         this.state.subscribe((changeType) => this._handleStateChange(changeType));
       }
 
       /**
        * Gather all DOM elements
+       * @returns {Object} Object containing all DOM element references
        * @private
        */
       _gatherElements() {
@@ -2172,7 +2642,10 @@
           colorHandle: document.getElementById('colorHandle'),
           customTooltip: document.getElementById('customTooltip'),
           errorTooltip: document.getElementById('errorTooltip'),
-          toggleSlide: document.getElementById('toggleSlide')
+          toggleSlide: document.getElementById('toggleSlide'),
+          saturationSlider: document.getElementById('saturationSlider'),
+          saturationHandle: document.getElementById('saturationHandle'),
+          saturationValueDisplay: document.getElementById('saturationValueDisplay')
         };
       }
 
@@ -2181,27 +2654,48 @@
        * @private
        */
       _initializeEventListeners() {
-        // Feature toggles
+        this._initializeFeatureToggles();
+        this._initializeColorInputs();
+        this._initializeNumericInputs();
+        this._initializeTabSwitching();
+        this._initializeImportButton();
+        this._initializeInputValidation();
+      }
+
+      /**
+       * Initialize feature toggle buttons
+       * @private
+       */
+      _initializeFeatureToggles() {
         document.querySelectorAll('.feature-toggle').forEach(toggle => {
           toggle.addEventListener('click', () => {
             const feature = toggle.dataset.feature;
             this._handleFeatureToggle(feature, toggle);
           });
         });
+      }
 
-        // Color value input
+      /**
+       * Initialize color input fields
+       * @private
+       */
+      _initializeColorInputs() {
         this.elements.colorValue.addEventListener('input', (e) => {
           this._handleColorInput(e.target.value);
         });
 
-        // Color name input
         this.elements.colorName.addEventListener('input', (e) => {
           this.state.colorName = e.target.value.trim();
           this.elements.importButton.disabled = !this.state.colorName;
           this._updateColorsList();
         });
+      }
 
-        // Color count input
+      /**
+       * Initialize numeric input fields
+       * @private
+       */
+      _initializeNumericInputs() {
         this.elements.colorCount.addEventListener('input', (e) => {
           const value = Math.max(CONFIG.COLOR_COUNT_MIN,
             Math.min(CONFIG.COLOR_COUNT_MAX, parseInt(e.target.value) || 10));
@@ -2209,39 +2703,46 @@
           this._regenerateColors();
         });
 
-        // Contrast input
         this.elements.contrastInput.addEventListener('input', (e) => {
           const value = Math.max(CONFIG.CONTRAST_MIN,
             Math.min(CONFIG.CONTRAST_MAX, parseFloat(e.target.value) || 1.0));
 
           this.state.updateSettings({ contrast: value });
 
-          // Auto-disable smart spacing when contrast changes
           if (value !== 1.0 && this.state.features.smartSpacing) {
             this._toggleFeatureButton('smartSpacing', false);
           }
 
           this._regenerateColors();
         });
+      }
 
-        // Tab switching
+      /**
+       * Initialize tab switching functionality
+       * @private
+       */
+      _initializeTabSwitching() {
         document.querySelectorAll('.toggle-button').forEach(button => {
           button.addEventListener('click', () => {
             this._switchTab(button.dataset.tab);
           });
         });
+      }
 
-        // Import button
+      /**
+       * Initialize import button
+       * @private
+       */
+      _initializeImportButton() {
         this.elements.importButton.addEventListener('click', () => {
           this._exportToFigma();
         });
-
-        // Input validation
-        this._initializeInputValidation();
       }
 
       /**
        * Handle feature toggle clicks
+       * @param {string} feature - Feature name
+       * @param {HTMLElement} toggleElement - Toggle button element
        * @private
        */
       _handleFeatureToggle(feature, toggleElement) {
@@ -2266,7 +2767,6 @@
           case 'smartSpacing':
             this.state.setFeature('smartSpacing', isActive);
 
-            // Handle contrast input state
             const contrastContainer = this.elements.contrastInput.closest('.contrast-input');
             if (isActive) {
               this.state.contrast = 1.0;
@@ -2292,6 +2792,7 @@
 
       /**
        * Handle color input changes
+       * @param {string} value - Input value
        * @private
        */
       _handleColorInput(value) {
@@ -2311,20 +2812,20 @@
       }
 
       /**
-       * Parse color input string
+       * Parse color input string to HEX or RGB
+       * @param {string} input - Raw input string
+       * @returns {string|null} Parsed color string or null
        * @private
        */
       _parseColorInput(input) {
         const value = input.trim();
 
         if (!this.state.features.rgbFormat) {
-          // HEX format
           const hexValue = value.replace(/^#/, '');
           if (hexValue.match(/^[0-9A-F]{6}$/i)) {
             return '#' + hexValue.toUpperCase();
           }
         } else {
-          // RGB format
           const numbers = value.replace(/[^\d\s,\.]/g, '').split(/[\s,\.]+/).filter(n => n);
           if (numbers.length >= 3) {
             const r = Math.min(255, Math.max(0, parseInt(numbers[0]) || 0));
@@ -2338,7 +2839,8 @@
       }
 
       /**
-       * Handle state changes
+       * Handle state changes from AppState
+       * @param {string} changeType - Type of change
        * @private
        */
       _handleStateChange(changeType) {
@@ -2359,7 +2861,12 @@
 
           case 'colors':
             this.colorPicker.drawDistributionPoints();
+            this.colorPicker.drawDesaturatedDistributionPoints();
             this._updateColorsList();
+            break;
+
+          case 'saturation-control':
+            this._regenerateColors();
             break;
 
           case 'preset':
@@ -2367,11 +2874,12 @@
             this.elements.contrastInput.value = this.state.contrast;
             this.elements.importButton.disabled = false;
 
-            // Update contrast UI state
             const contrastContainer = this.elements.contrastInput.closest('.contrast-input');
             this.elements.contrastInput.disabled = false;
             contrastContainer.classList.remove('disabled');
 
+            this.colorPicker.updateSaturationSlider();
+            this.colorPicker.drawDesaturatedCurve();
             this._updateDragControlsState();
             this._regenerateColors();
             break;
@@ -2390,7 +2898,8 @@
           colorCount: this.state.colorCount,
           contrast: this.state.contrast,
           smartSpacing: this.state.features.smartSpacing,
-          includeBlackWhite: this.state.features.includeBlackWhite
+          includeBlackWhite: this.state.features.includeBlackWhite,
+          saturationControl: this.state.saturationControl
         });
 
         this.state.updateGeneratedColors(colors, curvePoints);
@@ -2455,6 +2964,7 @@
 
       /**
        * Switch between tabs (Result/Presets)
+       * @param {string} tab - Tab name ('result' or 'presets')
        * @private
        */
       _switchTab(tab) {
@@ -2463,6 +2973,7 @@
         const presetsBtn = document.querySelector('.resources-button');
         const colorsList = this.elements.colorsList;
         const presetsList = this.elements.presetsList;
+        const slideOffset = 102;
 
         if (tab === 'result') {
           slide.style.transform = 'translateX(0)';
@@ -2477,7 +2988,7 @@
             setTimeout(() => colorsList.style.opacity = '1', 10);
           }, CONFIG.TAB_TRANSITION_DELAY);
         } else {
-          slide.style.transform = 'translateX(102px)';
+          slide.style.transform = `translateX(${slideOffset}px)`;
           resultBtn.classList.remove('active');
           presetsBtn.classList.add('active');
 
@@ -2506,6 +3017,7 @@
           colorsToExport.reverse();
         }
 
+        const rgbDivisor = 255;
         const exportData = colorsToExport.map(color => {
           const rgb = ColorMath.hexToRgb(color.hex);
           const textColor = ColorMath.getContrastTextColor(color.hex);
@@ -2514,9 +3026,9 @@
             hex: color.hex,
             name: color.displayName,
             rgb: {
-              r: rgb.r / 255,
-              g: rgb.g / 255,
-              b: rgb.b / 255
+              r: rgb.r / rgbDivisor,
+              g: rgb.g / rgbDivisor,
+              b: rgb.b / rgbDivisor
             },
             textColor: textColor === 'white'
               ? { r: 1, g: 1, b: 1 }
@@ -2540,12 +3052,14 @@
       }
 
       /**
-       * Initialize tooltips
+       * Initialize tooltips for feature toggles
        * @private
        */
       _initializeTooltips() {
         const tooltip = this.elements.customTooltip;
         const toggles = document.querySelectorAll('.feature-toggle');
+        const tooltipOffsetX = 18;
+        const tooltipOffsetY = 152;
 
         let tooltipTimeout = null;
 
@@ -2565,8 +3079,8 @@
               const buttonRect = toggle.getBoundingClientRect();
               const containerRect = toggle.closest('.feature-toggles').getBoundingClientRect();
 
-              const left = buttonRect.left - containerRect.left + (buttonRect.width / 2) + 18;
-              const top = buttonRect.bottom - containerRect.top + 152;
+              const left = buttonRect.left - containerRect.left + (buttonRect.width / 2) + tooltipOffsetX;
+              const top = buttonRect.bottom - containerRect.top + tooltipOffsetY;
 
               tooltip.style.left = left + 'px';
               tooltip.style.top = top + 'px';
@@ -2583,7 +3097,6 @@
           });
         });
 
-        // Error tooltip for import button
         this._initializeErrorTooltip();
       }
 
@@ -2595,6 +3108,8 @@
         const errorTooltip = this.elements.errorTooltip;
         const importButton = this.elements.importButton;
         const settingsContainer = document.querySelector('.settings');
+        const tooltipOffsetX = 20;
+        const tooltipOffsetY = 88;
 
         let errorTimeout = null;
 
@@ -2609,8 +3124,8 @@
             const buttonRect = importButton.getBoundingClientRect();
             const settingsRect = settingsContainer.getBoundingClientRect();
 
-            const left = buttonRect.left - settingsRect.left + (buttonRect.width / 2) + 20;
-            const top = buttonRect.top - settingsRect.top + 88;
+            const left = buttonRect.left - settingsRect.left + (buttonRect.width / 2) + tooltipOffsetX;
+            const top = buttonRect.top - settingsRect.top + tooltipOffsetY;
 
             errorTooltip.style.left = left + 'px';
             errorTooltip.style.top = top + 'px';
@@ -2670,12 +3185,15 @@
 
       /**
        * Add drag functionality to icon
+       * @param {HTMLElement} icon - Icon element
+       * @param {Object} config - Drag configuration
        * @private
        */
       _addDragToIcon(icon, config) {
         if (!icon || !config.input) return;
 
         let dragState = { active: false, startX: 0, startValue: 0 };
+        const cursorBlockedTimeout = 150;
 
         const updateCursor = () => {
           icon.style.cursor = (config.checkBlocked && config.checkBlocked())
@@ -2691,7 +3209,7 @@
 
           if (config.checkBlocked && config.checkBlocked()) {
             document.body.style.cursor = 'not-allowed';
-            setTimeout(() => document.body.style.cursor = '', 150);
+            setTimeout(() => document.body.style.cursor = '', cursorBlockedTimeout);
             return;
           }
 
@@ -2745,6 +3263,8 @@
 
       /**
        * Toggle feature button state
+       * @param {string} feature - Feature name
+       * @param {boolean} active - Active state
        * @private
        */
       _toggleFeatureButton(feature, active) {
@@ -2775,6 +3295,7 @@
        */
       _setupHexValidation() {
         const colorInputContainer = this.elements.colorValue.closest('.color-input');
+        const validationDelay = 300;
 
         const validateHex = (value) => {
           if (this.state.features.rgbFormat) return true;
@@ -2796,7 +3317,7 @@
           }
 
           clearTimeout(window.hexValidationTimeout);
-          window.hexValidationTimeout = setTimeout(updateValidationState, 300);
+          window.hexValidationTimeout = setTimeout(updateValidationState, validationDelay);
         });
 
         this.elements.colorValue.addEventListener('blur', () => {
@@ -2818,6 +3339,10 @@
        * @private
        */
       _setupRgbValidation() {
+        const maxDigits = 3;
+        const maxRgbValue = 255;
+        const minRgbComponents = 3;
+
         this.elements.colorValue.addEventListener('input', (e) => {
           if (!this.state.features.rgbFormat) return;
 
@@ -2825,13 +3350,11 @@
           let cursorPos = e.target.selectionStart;
           let originalLength = value.length;
 
-          // Remove invalid characters
           value = value.replace(/[^0-9\s,\.]/g, '');
 
           let parts = value.split(/[\s,\.]+/);
           let processedParts = [];
 
-          // Validate each part
           for (let i = 0; i < parts.length; i++) {
             let part = parts[i];
 
@@ -2840,21 +3363,18 @@
               continue;
             }
 
-            // Limit to 3 digits
-            if (part.length > 3) {
-              part = part.substring(0, 3);
+            if (part.length > maxDigits) {
+              part = part.substring(0, maxDigits);
             }
 
-            // Clamp to 255
             let num = parseInt(part);
-            if (!isNaN(num) && num > 255) {
-              part = '255';
+            if (!isNaN(num) && num > maxRgbValue) {
+              part = maxRgbValue.toString();
             }
 
             processedParts.push(part);
           }
 
-          // Reconstruct value with separators
           let separators = value.match(/[\s,\.]+/g) || [];
           let result = processedParts[0] || '';
           for (let i = 0; i < separators.length && i < processedParts.length - 1; i++) {
@@ -2877,12 +3397,12 @@
 
           let numbers = value.replace(/[^\d\s,\.]/g, '').split(/[\s,\.]+/).filter(n => n);
 
-          let correctedNumbers = numbers.slice(0, 3).map(num => {
+          let correctedNumbers = numbers.slice(0, minRgbComponents).map(num => {
             let n = parseInt(num);
-            return isNaN(n) ? 0 : Math.min(255, Math.max(0, n));
+            return isNaN(n) ? 0 : Math.min(maxRgbValue, Math.max(0, n));
           });
 
-          while (correctedNumbers.length < 3) {
+          while (correctedNumbers.length < minRgbComponents) {
             correctedNumbers.push(0);
           }
 
@@ -2946,6 +3466,9 @@
 
       /**
        * Create preset element
+       * @param {string} id - Preset identifier
+       * @param {Object} preset - Preset configuration
+       * @returns {HTMLElement} Preset DOM element
        * @private
        */
       _createPresetElement(id, preset) {
@@ -2953,8 +3476,16 @@
         item.className = 'preset-item';
         item.dataset.preset = id;
 
-        // Generate preview colors for this preset
         const previewColors = this._generatePreviewColors(preset);
+        const hsv = ColorMath.hexToHsv(preset.color);
+        const hoverColor = ColorMath.getDesaturatedColor(
+          hsv.h,
+          hsv.s,
+          hsv.v,
+          preset.saturation
+        );
+
+        const isGrayPreset = preset.saturation < CONFIG.SATURATION_MAX;
 
         item.innerHTML = `
           <div class="preset-spectrum">
@@ -2962,23 +3493,33 @@
           `<div class="spectrum-color" style="background: ${color};"></div>`
         ).join('')}
           </div>
-          <div class="preset-info" style="background: ${preset.color};">
+          <div class="preset-info" style="background: ${hoverColor};">
             <span class="preset-name">${preset.name}</span>
-            <div class="preset-contrast-container">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21.1836 12.9453C21.1836 7.9744 17.1545 3.94531 12.1846 3.94531C7.21463 3.94531 3.18555 7.9744 3.18555 12.9453C3.18555 17.9153 7.21463 21.9444 12.1846 21.9444C17.1545 21.9444 21.1836 17.9153 21.1836 12.9453Z"
-                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12.1309 20.8749L21.1301 11.9922" stroke="currentColor" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M17.3949 5.60938L12.209 10.7369" stroke="currentColor" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12.1602 15.8258L19.8462 8.2168" stroke="currentColor" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12.1211 3.94531V21.9444" stroke="currentColor" stroke-width="1.5"
-                  stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <span class="preset-contrast">${preset.contrast}</span>
-            </div>
+            ${isGrayPreset ? `
+              <div class="preset-contrast-container preset-saturation-container">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15.5217V13.459M21 10.5405V8.29297M13 21H15.3949M15.2001 3H13.0014M18.5946 20.3586C19.3791 19.9499 19.9882 19.3272 20.3804 18.5586M20.2975 5.28654C19.864 4.53735 19.2343 3.94384 18.4395 3.54492" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 3H7C4.79086 3 3 4.79086 3 7V17C3 19.2091 4.79086 21 7 21H10V3Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="preset-saturation">${preset.saturation}%</span>
+              </div>
+            ` : `
+              <div class="preset-contrast-container">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21.1836 12.9453C21.1836 7.9744 17.1545 3.94531 12.1846 3.94531C7.21463 3.94531 3.18555 7.9744 3.18555 12.9453C3.18555 17.9153 7.21463 21.9444 12.1846 21.9444C17.1545 21.9444 21.1836 17.9153 21.1836 12.9453Z"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12.1309 20.8749L21.1301 11.9922" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M17.3949 5.60938L12.209 10.7369" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12.1602 15.8258L19.8462 8.2168" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12.1211 3.94531V21.9444" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="preset-contrast">${preset.contrast}</span>
+              </div>
+            `}
             <span class="preset-hex">${preset.color}</span>
           </div>
         `;
@@ -2988,19 +3529,23 @@
 
       /**
        * Generate preview colors for preset
+       * @param {Object} preset - Preset configuration
+       * @returns {Array} Array of HEX color strings
        * @private
        */
       _generatePreviewColors(preset) {
         const hsv = ColorMath.hexToHsv(preset.color);
+        const previewColorCount = 10;
 
         const { colors } = ColorGenerator.generatePalette({
           hue: hsv.h,
           saturation: hsv.s,
           value: hsv.v,
-          colorCount: 10,
+          colorCount: previewColorCount,
           contrast: preset.contrast,
           smartSpacing: false,
-          includeBlackWhite: false
+          includeBlackWhite: false,
+          saturationControl: preset.saturation
         });
 
         return colors.map(c => c.hex).reverse();
@@ -3011,6 +3556,10 @@
        * @private
        */
       _initializeEventListeners() {
+        const scaleAnimationDuration = 100;
+        const scalePressed = 0.98;
+        const scaleNormal = 1;
+
         document.querySelectorAll('.preset-item').forEach(item => {
           const presetId = item.dataset.preset;
           if (!presetId) return;
@@ -3023,11 +3572,10 @@
             if (preset) {
               this.state.applyPreset(preset);
 
-              // Visual feedback
-              item.style.transform = 'scale(0.98)';
+              item.style.transform = `scale(${scalePressed})`;
               setTimeout(() => {
-                item.style.transform = 'scale(1)';
-              }, 100);
+                item.style.transform = `scale(${scaleNormal})`;
+              }, scaleAnimationDuration);
             }
           });
 
@@ -3052,7 +3600,6 @@
        * Initialize the application
        */
       initialize() {
-        // Wait for DOM to be ready
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', () => this._setup());
         } else {
@@ -3065,13 +3612,8 @@
        * @private
        */
       _setup() {
-        // Initialize UI controller
         this.ui = new UIController(this.state);
-
-        // Initialize preset manager
         this.presetManager = new PresetManager(this.state);
-
-        // Initial render
         this._performInitialRender();
 
         console.log('✨ Shade Perfection initialized successfully');
@@ -3082,11 +3624,10 @@
        * @private
        */
       _performInitialRender() {
-        // Update all visual elements
         this.ui.colorPicker.updateVisuals();
         this.ui.colorPicker.drawCurve();
+        this.ui.colorPicker.drawDesaturatedCurve();
 
-        // Generate initial colors
         const { colors, curvePoints } = ColorGenerator.generatePalette({
           hue: this.state.hue,
           saturation: this.state.saturation,
@@ -3094,12 +3635,12 @@
           colorCount: this.state.colorCount,
           contrast: this.state.contrast,
           smartSpacing: this.state.features.smartSpacing,
-          includeBlackWhite: this.state.features.includeBlackWhite
+          includeBlackWhite: this.state.features.includeBlackWhite,
+          saturationControl: this.state.saturationControl
         });
 
         this.state.updateGeneratedColors(colors, curvePoints);
 
-        // Disable import button initially (no color name)
         const importButton = document.getElementById('importButton');
         if (importButton) {
           importButton.disabled = true;

@@ -1,6 +1,6 @@
 {
-  "name": "Shade-Perfection",
-  "version": "1.1.0",
+  "name": "shade-perfection",
+  "version": "1.2.0",
   "description": "Your Figma Plugin",
   "main": "code.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
     "watch": "npm run build -- --watch"
   },
-  "author": "",
-  "license": "",
+  "author": "Nursultan Akim",
+  "license": "MIT",
   "devDependencies": {
     "@figma/eslint-plugin-figma-plugins": "*",
     "@figma/plugin-typings": "^1.115.0",

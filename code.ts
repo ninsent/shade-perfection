@@ -17,7 +17,7 @@
 
 const UI_CONFIG = {
   width: 462,
-  height: 438,
+  height: 462,
   themeColors: true
 } as const;
 

@@ -1,6 +1,6 @@
 {
   "name": "shade-perfection",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Figma plugin for generating mathematically balanced color shades and tints",
   "main": "code.js",
  "scripts": {

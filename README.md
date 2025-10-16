@@ -81,6 +81,7 @@ npm install
 ```bash
 npm run build
 ```
+The plugin uses **Vite** to bundle the UI. All source files are in `src/`, build output goes to `dist/`.
 
 5. Test in Figma:
    - Open Figma Desktop
@@ -263,11 +264,9 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 
 ## Changelog
 
-### [1.2.0] - 2025-10-16
+### [1.2.1] - 2025-10-16
 
-- Added: Global saturation control (0-100%) with curve visualization & Warm/Cool Gray presets
-- Changed: Palette generation algorithm & Rebalanced all preset configurations
-- Fixed: Icon positioning & Package.json metadata
+- Changed: Internal codebase refactoring with Vite build system and modular architecture
 
 Check the [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes.
 

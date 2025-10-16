@@ -69,7 +69,7 @@ git clone https://github.com/ninsent/shade-perfection.git
 2. Go to the project directory
 
 ```bash
-  cd shade-perfection
+cd shade-perfection
 ```
 
 3. Install dependencies:

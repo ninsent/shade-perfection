@@ -3,11 +3,13 @@
   "version": "1.2.0",
   "description": "Figma plugin for generating mathematically balanced color shades and tints",
   "main": "code.js",
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
+ "scripts": {
+    "dev": "concurrently \"vite\" \"tsc --watch\"",
+    "build": "tsc && vite build && npm run rename",
+    "rename": "node -e \"require('fs').renameSync('dist/index.html', 'dist/ui.html')\"",
     "lint": "eslint --ext .ts,.tsx --ignore-pattern node_modules .",
     "lint:fix": "eslint --ext .ts,.tsx --ignore-pattern node_modules --fix .",
-    "watch": "npm run build -- --watch"
+    "preview": "vite preview"
   },
   "author": "Nursultan Akim",
   "license": "MIT",
@@ -16,8 +18,11 @@
     "@figma/plugin-typings": "^1.115.0",
     "@typescript-eslint/eslint-plugin": "^6.12.0",
     "@typescript-eslint/parser": "^6.12.0",
+    "concurrently": "^9.2.1",
     "eslint": "^8.54.0",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vite": "^7.1.10",
+    "vite-plugin-singlefile": "^2.3.0"
   },
   "eslintConfig": {
     "extends": [

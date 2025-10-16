@@ -1,0 +1,1019 @@
+/* ============================================================================
+    GLOBAL RESET & BASE STYLES
+    ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* Allow text selection in inputs */
+input[type="text"],
+input[type="number"],
+.color-value-editable {
+  user-select: text;
+}
+
+/* Hide number input spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ============================================================================
+    LAYOUT STRUCTURE
+    ============================================================================ */
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-xxl);
+  gap: var(--spacing-xl);
+  width: 462px;
+  height: 462px;
+  background: var(--figma-color-bg);
+  border-radius: var(--spacing-md);
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Settings Panel (Left Side) */
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: var(--spacing-xl);
+  width: 204px;
+  height: 426px;
+}
+
+/* Results Panel (Right Side) */
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  width: 214.5px;
+  height: 426px;
+  margin-left: calc(var(--spacing-xs) * -1);
+  margin-right: calc(var(--spacing-sm) * -1.5);
+}
+
+/* ============================================================================
+    INPUT CONTROLS
+    ============================================================================ */
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: var(--spacing-md);
+  width: 204px;
+  height: 114px;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  width: 204px;
+  height: 24px;
+}
+
+.input-label {
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--figma-color-text);
+}
+
+/* Standard Text Input */
+.input-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4.5px var(--spacing-md);
+  gap: 7.5px;
+  width: 128px;
+  height: 24px;
+  background: var(--figma-color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 12px;
+  color: var(--figma-color-text);
+  outline: none;
+}
+
+.input-field::placeholder {
+  color: var(--figma-color-text-secondary);
+}
+
+.input-field:focus {
+  outline: 1.5px solid var(--figma-color-bg-brand);
+  outline-offset: 0;
+}
+
+/* ============================================================================
+    COLOR INPUT COMPONENT
+    ============================================================================ */
+
+.color-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--spacing-sm);
+  gap: 5px;
+  width: 128px;
+  height: 24px;
+  background: var(--figma-color-bg-secondary);
+  border-radius: var(--radius-md);
+  transition: outline var(--transition-fast);
+}
+
+.color-input:focus-within {
+  outline: 1.5px solid var(--figma-color-bg-brand);
+  outline-offset: 0;
+}
+
+/* Error State */
+.color-input.error,
+.color-input.error:focus-within {
+  outline: 1.5px solid #ff4757 !important;
+  outline-offset: 0;
+}
+
+/* Color Preview Swatch */
+.color-preview {
+  width: 16px;
+  height: 16px;
+  background: #077be4;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+/* Color Input Wrapper */
+.color-input-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background: transparent;
+  min-width: 0;
+}
+
+.color-prefix {
+  font-size: 12px;
+  color: var(--figma-color-text-secondary);
+  user-select: none;
+  pointer-events: none;
+  margin-right: 1.5px;
+}
+
+.color-suffix {
+  font-size: 12px;
+  color: var(--figma-color-text-secondary);
+  user-select: none;
+  pointer-events: none;
+}
+
+.color-value-editable {
+  font-size: 12px;
+  color: var(--figma-color-text);
+  border: none;
+  background: transparent;
+  outline: none;
+  min-width: 37.5px;
+  width: auto;
+  flex: 0 1 auto;
+}
+
+/* ============================================================================
+    CONTRAST & NUMERIC INPUTS
+    ============================================================================ */
+
+.contrast-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: 1px;
+  width: 128px;
+  height: 24px;
+  background: var(--figma-color-bg-secondary);
+  border-radius: var(--radius-md);
+  transition: outline var(--transition-fast);
+}
+
+.contrast-input:focus-within {
+  outline: 1.5px solid var(--figma-color-bg-brand);
+  outline-offset: 0;
+}
+
+/* Disabled State */
+.contrast-input.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contrast-input.disabled:hover {
+  outline: none;
+}
+
+/* Draggable Icon Controls */
+.contrast-input svg {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+body.dragging .contrast-input svg {
+  pointer-events: auto !important;
+}
+
+/* Generic Numeric Input */
+.color-value {
+  font-size: 12px;
+  color: var(--figma-color-text);
+  border: none;
+  background: transparent;
+  flex: 1;
+  outline: none;
+}
+
+.color-value:disabled {
+  color: var(--figma-color-text-secondary);
+  cursor: not-allowed;
+}
+
+.icon-input {
+  width: 18px;
+  height: 18px;
+  fill: var(--figma-color-icon);
+}
+
+/* ============================================================================
+    FEATURE TOGGLES (Previously Radio Buttons)
+    ============================================================================ */
+
+.feature-toggles {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  gap: var(--spacing-md);
+  width: 204px;
+  height: 36px;
+  position: relative;
+}
+
+.feature-toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4.5px;
+  width: 36px;
+  height: 36px;
+  background: var(--figma-color-bg);
+  border: 1.5px solid var(--figma-color-bg-secondary);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.feature-toggle:hover {
+  background: var(--figma-color-bg);
+  border-color: var(--figma-color-bg-brand);
+}
+
+/* Active State */
+.feature-toggle.active {
+  background: var(--figma-color-bg-brand);
+  border-color: var(--figma-color-bg-brand);
+}
+
+.feature-toggle.active:hover {
+  background: var(--figma-color-bg-brand);
+  border-color: var(--figma-color-bg-brand);
+}
+
+/* Toggle Icons */
+.feature-toggle svg {
+  width: 27px;
+  height: 27px;
+  fill: #8c8c8c;
+  transition: fill var(--transition-normal);
+}
+
+.feature-toggle:hover svg {
+  fill: var(--figma-color-bg-brand);
+}
+
+.feature-toggle.active svg {
+  fill: var(--figma-color-text-onbrand);
+}
+
+.feature-toggle.active:hover svg {
+  fill: var(--figma-color-text-onbrand);
+}
+
+/* ============================================================================
+    ACTION BUTTONS
+    ============================================================================ */
+
+.import-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10.5px 57px;
+  gap: 7.5px;
+  width: 204px;
+  height: 36px;
+  background: var(--figma-color-bg-brand);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--figma-color-text-onbrand);
+  transition: background-color var(--transition-normal);
+}
+
+.import-button:hover {
+  background: #007be5;
+}
+
+/* Disabled State */
+.import-button:disabled,
+.import-button.disabled {
+  background: var(--figma-color-bg-secondary);
+  color: var(--figma-color-text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.import-button:disabled:hover,
+.import-button.disabled:hover {
+  background: var(--figma-color-bg-secondary);
+}
+
+/* ============================================================================
+    COLOR PICKER COMPONENTS
+    ============================================================================ */
+
+.color-picker-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  gap: var(--spacing-md);
+  width: 204px;
+  height: 180px;
+}
+
+/* Hue Slider */
+.hue-slider {
+  width: 18px;
+  height: 180px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    180deg,
+    #ff0000 0%,
+    #ff6000 11.06%,
+    #ffd900 22.12%,
+    #00ff00 34.13%,
+    #00cbff 47.6%,
+    #003dff 61.06%,
+    #a800ff 74.04%,
+    #ff00ed 87.02%,
+    #ff0000 100%
+  );
+  position: relative;
+  cursor: pointer;
+}
+
+.hue-handle {
+  position: absolute;
+  width: 18px;
+  height: 9px;
+  border: 1.5px solid #ffffff;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Color Palette Canvas */
+.color-palette {
+  width: 180px;
+  height: 180px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(to right, #ffffff, #ff0000),
+    linear-gradient(to top, #000000, transparent);
+  position: relative;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+/* Darkness Gradient Overlay */
+.color-palette::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, black);
+  pointer-events: none;
+}
+
+/* Color Selection Handle */
+.color-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid white;
+  border-radius: 50%;
+  cursor: grab;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--shadow-sm);
+  z-index: var(--z-handle);
+  background: #077be4;
+}
+
+.color-handle:active {
+  cursor: grabbing;
+}
+
+/* Distribution Points on Main Curve */
+.distribution-point {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 0.75px solid white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0.75px 3px rgba(0, 0, 0, 0.3);
+  z-index: var(--z-points);
+  pointer-events: none;
+}
+
+/* Superellipse Curve Visualization */
+.superellipse-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  pointer-events: none;
+  z-index: var(--z-curve);
+}
+
+/* Desaturated (Secondary) Curve Visualization */
+.desaturated-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  pointer-events: none;
+  z-index: var(--z-curve-secondary);
+}
+
+/* Distribution Points on Desaturated Curve */
+.distribution-point-secondary {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 0.75px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0.75px 3px rgba(0, 0, 0, 0.3);
+  z-index: var(--z-points-secondary);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* ============================================================================
+    SATURATION CONTROLS
+    ============================================================================ */
+
+.saturation-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  gap: var(--spacing-md);
+  width: 204px;
+  height: 18px;
+  margin-top: -6px;
+}
+
+/* Saturation Value Display */
+.saturation-value-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  background: var(--figma-color-bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 9px;
+  line-height: 9px;
+  color: var(--figma-color-text);
+  font-weight: 500;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Saturation Slider */
+.saturation-slider {
+  width: 180px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, #808080 0%, #077be4 100%);
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Saturation Handle */
+.saturation-handle {
+  position: absolute;
+  width: 9px;
+  height: 18px;
+  border: 1.5px solid #ffffff;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 81%;
+}
+
+/* ============================================================================
+    RESULTS PANEL & TAB NAVIGATION
+    ============================================================================ */
+
+.top-bar {
+  width: 214.5px;
+  height: 42px;
+  background: var(--figma-color-bg);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* Tab Switcher */
+.switch-toggle {
+  width: 207px;
+  height: 36px;
+  background: var(--figma-color-bg-secondary);
+  border-radius: var(--radius-lg);
+  position: relative;
+}
+
+/* Animated Slide Indicator */
+.slide {
+  position: absolute;
+  width: 97.5px;
+  height: 30px;
+  left: 3px;
+  top: 3px;
+  background: var(--figma-color-bg);
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-md);
+  transition: transform var(--transition-slow);
+}
+
+/* Tab Buttons */
+.toggle-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7.5px 30px;
+  position: absolute;
+  width: 97.5px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  z-index: var(--z-base);
+  transition: color var(--transition-normal);
+}
+
+.toggle-button.active {
+  color: var(--figma-color-text);
+}
+
+.toggle-button:not(.active) {
+  color: var(--figma-color-text-secondary);
+}
+
+.result-button {
+  left: 3px;
+  top: 3px;
+}
+
+.resources-button {
+  left: 105px;
+  top: 3px;
+}
+
+/* Separator Line */
+.line {
+  position: absolute;
+  width: 207px;
+  height: 1px;
+  bottom: 0;
+  border-bottom: 1px solid var(--figma-color-bg-secondary);
+}
+
+/* ============================================================================
+    COLOR LIST DISPLAY
+    ============================================================================ */
+
+.colors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--spacing-md);
+  gap: var(--spacing-xs);
+  width: 214px;
+  height: 396px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: opacity var(--transition-slow);
+}
+
+/* Individual Color Item */
+.color-preview-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7.5px var(--spacing-lg);
+  width: 204px;
+  height: 30px;
+  background: var(--figma-color-bg-tertiary);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-xs);
+  transition: background-color var(--transition-normal);
+}
+
+.color-name {
+  font-size: 12px;
+  color: var(--figma-color-text);
+}
+
+.color-hex {
+  font-size: 12px;
+  color: var(--figma-color-text);
+  text-align: right;
+  user-select: text;
+}
+
+/* ============================================================================
+    PRESETS SECTION
+    ============================================================================ */
+
+#presetsList {
+  gap: 0px;
+}
+
+.presets-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 204px;
+  height: 316px;
+  gap: 3px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Preset Item Container */
+.preset-item {
+  width: 204px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: transform 0.1s ease;
+}
+
+/* Color Spectrum Display */
+.preset-spectrum {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.spectrum-color {
+  flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Preset Info Overlay (Shown on Hover) */
+.preset-info {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 7.5px var(--spacing-lg);
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.preset-item:hover .preset-spectrum {
+  display: none;
+}
+
+.preset-item:hover .preset-info {
+  display: flex;
+}
+
+.preset-info * {
+  font-size: 12px;
+  color: white;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.preset-contrast-container {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.preset-contrast-container svg {
+  width: 18px;
+  height: 18px;
+  color: white;
+  display: block;
+}
+
+.preset-saturation-container {
+  gap: 4px;
+}
+
+.preset-saturation {
+  font-size: 12px;
+  color: white;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+/* ============================================================================
+    INFO SECTION
+    ============================================================================ */
+
+.info-section {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 204px;
+  height: 54px;
+  gap: var(--spacing-md);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 4px var(--spacing-md);
+  gap: 2px;
+  width: 204px;
+  height: 24px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  text-decoration: none;
+  background: var(--figma-color-bg-secondary);
+  color: var(--figma-color-text);
+}
+
+.info-button {
+  cursor: pointer;
+  justify-content: space-between;
+  transition: background-color var(--transition-slow);
+}
+
+.info-button:hover {
+  background: var(--figma-color-bg-brand);
+  color: white;
+}
+
+.info-item svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--figma-color-icon);
+  margin: 0px;
+}
+
+.info-button svg {
+  stroke: var(--figma-color-text-secondary);
+}
+
+.info-button:hover svg {
+  stroke: white;
+}
+
+/* ============================================================================
+    CUSTOM SCROLLBARS
+    ============================================================================ */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--figma-color-bg-secondary) transparent;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--figma-color-bg-secondary);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--figma-color-text-tertiary);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Enhanced scrollbar for color list */
+.colors-list::-webkit-scrollbar {
+  width: 9px;
+  position: absolute;
+}
+
+.colors-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4.5px;
+  border: 2.25px solid transparent;
+  background-clip: padding-box;
+}
+
+.colors-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Dark theme scrollbar adjustments */
+.figma-dark .colors-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.figma-dark .colors-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================================================
+    TOOLTIPS
+    ============================================================================ */
+
+/* Standard Tooltip */
+.tooltip {
+  position: absolute;
+  background: var(--figma-color-bg);
+  border: 1px solid var(--figma-color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 11px;
+  color: var(--figma-color-text);
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-tooltip);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+}
+
+.tooltip.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Tooltip Arrow */
+.tooltip::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid var(--figma-color-border);
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid var(--figma-color-bg);
+}
+
+/* Error Tooltip */
+.tooltip-error {
+  position: absolute;
+  background: #ff4757;
+  border: 1px solid #ff3838;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 11px;
+  color: #ffffff;
+  text-align: center;
+  user-select: none;
+  box-shadow: 0 3px 12px rgba(255, 71, 87, 0.3);
+  z-index: var(--z-tooltip);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+}
+
+.tooltip-error.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Error Tooltip Arrow */
+.tooltip-error::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #ff3838;
+}
+
+.tooltip-error::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #ff4757;
+}
+
+/* ============================================================================
+    UTILITY CLASSES
+    ============================================================================ */
+
+.focused {
+  outline: 1.5px solid var(--figma-color-bg-brand);
+  outline-offset: 0;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
